@@ -1,50 +1,19 @@
 import Comment from '../comment';
-import { CommentBottom, CommentType } from '../../types';
-import { COMMENT } from '../../constants';
-import { nanoid } from 'nanoid';
+import { InputType, CommentType } from '../../types';
+import { DATA_ATTR, SELECTOR } from '../../constants';
+import {
+    deleteComment,
+    findComment,
+    generateNewComment,
+    getTextFromCurrentCommentContainer,
+} from '../../utils';
+
+import './styles.scss';
 
 interface CommentContainerProps {
     comments: Array<CommentType>;
     setComments: React.Dispatch<React.SetStateAction<Array<CommentType>>>;
 }
-
-const deleteComment = (
-    comments: Array<CommentType>,
-    commentId: string
-): Array<CommentType> => {
-    const filteredComments = comments.filter((comment) => {
-        if (comment.id === commentId) {
-            // If the comment matches the specified ID, filter it out.
-            return false;
-        } else if (comment.replies.length > 0) {
-            // If the comment has replies, recursively filter them.
-            comment.replies = deleteComment(comment.replies, commentId);
-        }
-
-        return true;
-    });
-
-    return filteredComments;
-};
-
-const findComment = (
-    deepCopiedComments: Array<CommentType>,
-    commentId: string
-): CommentType | undefined => {
-    for (const comment of deepCopiedComments) {
-        if (comment.id === commentId) {
-            return comment;
-        }
-
-        const foundComment = findComment(comment.replies, commentId);
-
-        if (foundComment) {
-            return foundComment;
-        }
-    }
-
-    return undefined;
-};
 
 const CommentContainer: React.FC<CommentContainerProps> = ({
     comments,
@@ -52,8 +21,9 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
 }) => {
     const onCommentActions = (e: React.ChangeEvent<any>) => {
         const actionType = e.target.dataset;
-        const commentId = (e.target.closest('.comment-wrapper') as HTMLElement)
-            ?.dataset.id;
+        const commentId = (
+            e.target.closest(SELECTOR.COMMENT_WRAPPER) as HTMLElement
+        )?.dataset.id;
 
         if (!commentId || !actionType) {
             return;
@@ -66,11 +36,12 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
 
             if (!deepCopiedComments) return prevComments;
 
-            if (actionType.buttonType === COMMENT.DELETE) {
+            if (actionType.buttonType === DATA_ATTR.DELETE) {
                 deepCopiedComments = deleteComment(
                     deepCopiedComments,
                     commentId
                 );
+
                 return deepCopiedComments;
             }
 
@@ -78,69 +49,51 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
 
             if (!targetComment) return prevComments;
 
-            if (actionType.buttonType === COMMENT.REPLY) {
-                targetComment.showBottom = (
-                    targetComment.showBottom !== COMMENT.ADD_REPLY
-                        ? COMMENT.ADD_REPLY
+            if (actionType.buttonType === DATA_ATTR.REPLY) {
+                targetComment.inputType = (
+                    targetComment.inputType !== DATA_ATTR.POST
+                        ? DATA_ATTR.POST
                         : null
-                ) as CommentBottom;
+                ) as InputType;
+
                 return deepCopiedComments;
             }
 
-            if (actionType.buttonType === COMMENT.ADD_REPLY) {
-                const commentBottom = e.target.closest(
-                    '.comment-bottom'
-                ) as HTMLElement;
-                if (!commentBottom) return deepCopiedComments;
+            if (actionType.buttonType === DATA_ATTR.POST) {
+                const newText = getTextFromCurrentCommentContainer(e.target);
+                if (!newText) return deepCopiedComments;
 
-                const newText = (
-                    commentBottom.firstChild as HTMLTextAreaElement
-                )?.value;
-
-                const newReply: CommentType = {
-                    id: nanoid(),
-                    showBottom: null,
-                    text: newText,
-                    replies: [],
-                    createdAt: Date.now(),
-                };
+                const newReply: CommentType = generateNewComment(newText);
                 targetComment.replies.push(newReply);
-                targetComment.showBottom = null;
+                targetComment.inputType = null;
+
                 return deepCopiedComments;
             }
 
-            if (
-                actionType.comment === COMMENT.TEXT ||
-                actionType.buttonType === COMMENT.EDIT
-            ) {
-                targetComment.showBottom = (
-                    targetComment.showBottom !== COMMENT.EDIT
-                        ? COMMENT.EDIT
+            if (actionType.buttonType === DATA_ATTR.EDIT) {
+                targetComment.inputType = (
+                    targetComment.inputType !== DATA_ATTR.EDIT
+                        ? DATA_ATTR.EDIT
                         : null
-                ) as CommentBottom;
+                ) as InputType;
+
                 return deepCopiedComments;
             }
 
-            if (actionType.buttonType === COMMENT.CANCEL) {
-                targetComment.showBottom = null;
+            if (actionType.buttonType === DATA_ATTR.CANCEL) {
+                targetComment.inputType = null;
+
                 return deepCopiedComments;
             }
 
-            if (actionType.buttonType === COMMENT.SAVE) {
-                const commentBottom = e.target.closest(
-                    '.comment-bottom'
-                ) as HTMLElement;
-                if (!commentBottom) return deepCopiedComments;
-
-                const newText = (
-                    commentBottom.firstChild as HTMLTextAreaElement
-                )?.value;
-
+            if (actionType.buttonType === DATA_ATTR.SAVE) {
+                const newText = getTextFromCurrentCommentContainer(e.target);
                 if (!newText) return deepCopiedComments;
 
                 targetComment.text =
                     newText.length > 0 ? newText : targetComment.text;
-                targetComment.showBottom = null;
+                targetComment.inputType = null;
+
                 return deepCopiedComments;
             }
 
@@ -154,7 +107,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
                     key={commentData.id}
                     commentData={commentData}
                     depth={0}
-                /> //! Shouldn't use index as key
+                />
             ))}
         </div>
     );

@@ -1,0 +1,86 @@
+$primary-color: #6c63ff;
+$primary-color-hover: lighten(#6c63ff, 3%);
+$text-area-border-radius: 5px;
+$button-border-radius: 5px;
+$box-shadow: 0px 0px 15px 1px #f5f5ff;
+$box-shadow-hover: 0px 0px 15px 1px #eaeafd;
+$border-color: #ccc;
+$transition-duration: 0.4s;
+
+$text-area-height: 100px;
+$max-page-width: 1100px;
+
+// Margin & Padding
+$space-amounts: (1, 2, 3, 4, 5);
+
+@each $space in $space-amounts {
+    // All around margin
+    .m-#{$space} {
+        margin: #{$space}rem;
+    }
+
+    // Vertical Margin
+    .my-#{$space} {
+        margin: #{$space}rem 0;
+    }
+
+    // Horizontal Margin
+    .mx-#{$space} {
+        margin: 0 #{$space}rem;
+    }
+
+    // All around Padding
+    .p-#{$space} {
+        padding: #{$space}rem;
+    }
+
+    // Vertical Padding
+    .py-#{$space} {
+        padding: #{$space}rem 0;
+    }
+
+    // Horizontal Padding
+    .px-#{$space} {
+        padding: 0 #{$space}rem;
+    }
+
+    // Top Margin
+    .mt-#{$space} {
+        margin-top: #{$space}rem;
+    }
+
+    // Bottom Margin
+    .mb-#{$space} {
+        margin-bottom: #{$space}rem;
+    }
+
+    // Left Margin
+    .ml-#{$space} {
+        margin-left: #{$space}rem;
+    }
+
+    // Right Margin
+    .mr-#{$space} {
+        margin-right: #{$space}rem;
+    }
+
+    // Top Padding
+    .pt-#{$space} {
+        padding-top: #{$space}rem;
+    }
+
+    // Bottom Padding
+    .pb-#{$space} {
+        padding-bottom: #{$space}rem;
+    }
+
+    // Left Padding
+    .pl-#{$space} {
+        padding-left: #{$space}rem;
+    }
+
+    // Right Padding
+    .pr-#{$space} {
+        padding-right: #{$space}rem;
+    }
+}

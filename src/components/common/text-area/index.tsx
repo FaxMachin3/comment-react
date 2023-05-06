@@ -1,5 +1,7 @@
 import { ForwardedRef, Ref, forwardRef } from 'react';
 
+import './style.scss';
+
 interface TextAreaProps
     extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
     customClass?: string;

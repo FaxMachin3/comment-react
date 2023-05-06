@@ -1,0 +1,19 @@
+@import '../../../partials/config';
+
+.text-area {
+    font-family: Montserrat, 'Open Sans', Helvetica, Arial, sans-serif;
+    font-size: 1.6rem;
+    line-height: 1.6;
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    border-radius: $text-area-border-radius;
+    outline: 1px solid lighten($primary-color-hover, 70%);
+    box-shadow: $box-shadow;
+    transition-duration: $transition-duration;
+
+    &:focus {
+        outline: 1px solid $primary-color;
+        box-shadow: $box-shadow-hover;
+    }
+}

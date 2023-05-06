@@ -8,7 +8,6 @@ import './App.scss';
 
 function App() {
     const [comments, setComments] = useState<Array<CommentType>>([]);
-    console.log(comments);
 
     return (
         <>

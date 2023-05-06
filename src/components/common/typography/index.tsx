@@ -1,3 +1,5 @@
+import './styles.scss';
+
 interface TypographyProps {
     customClass?: string;
     children: React.ReactNode; // TODO: add other types
@@ -13,7 +15,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
     ...restProps
 }) => {
     return (
-        <p className={`comment ${customClass}`} {...restProps}>
+        <p className={`para ${customClass}`} {...restProps}>
             {children}
         </p>
     );
@@ -25,7 +27,7 @@ const Heading: React.FC<HeadingProps> = ({
     ...restProps
 }) => {
     return (
-        <h1 className={`comment ${customClass}`} {...restProps}>
+        <h1 className={`heading ${customClass}`} {...restProps}>
             {children}
         </h1>
     );

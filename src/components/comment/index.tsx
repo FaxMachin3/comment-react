@@ -1,12 +1,11 @@
 import Typography from '../common/typography';
 import Button from '../common/button';
-
 import { CommentType } from '../../types';
+import { BUTTON_TEXT, DATA_ATTR, PLACEHOLDER } from '../../constants';
+import TextArea from '../common/text-area';
+import { useCustomRefWithCallback } from '../../hooks';
 
 import './style.scss';
-import { COMMENT } from '../../constants';
-import TextArea from '../common/text-area';
-import { useEffect, useRef } from 'react';
 
 interface CommentProps {
     customClass?: string;
@@ -16,64 +15,86 @@ interface CommentProps {
 
 const Comment: React.FC<CommentProps> = ({
     customClass = '',
-    commentData: { id, showBottom, text, replies, createdAt },
+    commentData: { id, inputType, text, replies, createdAt },
     depth,
 }) => {
-    const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
-    useEffect(() => {
-        if (textAreaRef.current) {
-            textAreaRef.current.value = showBottom === COMMENT.EDIT ? text : '';
-        }
-    }, [showBottom]);
+    const textAreaRef = useCustomRefWithCallback<HTMLTextAreaElement>(
+        (textAreaRef) => {
+            textAreaRef.current!.value =
+                inputType === DATA_ATTR.EDIT ? text : '';
+        },
+        [inputType]
+    );
 
     return (
-        <div className={`comment ${customClass}`}>
+        <div className={`comment p-1 ${customClass}`}>
             <div className="comment-wrapper" data-id={id}>
-                <div className="comment-top">
-                    <Typography.Paragraph data-comment={COMMENT.TEXT}>
-                        {text}
-                    </Typography.Paragraph>
-                    <Button data-button-type={COMMENT.EDIT}>
-                        {COMMENT.EDIT}
-                    </Button>
-                    <Button data-button-type={COMMENT.DELETE}>
-                        {COMMENT.DELETE}
-                    </Button>
-                    <Button data-button-type={COMMENT.REPLY}>
-                        {COMMENT.REPLY}
-                    </Button>
-                </div>
-                {!!showBottom && (
-                    <div className="comment-bottom">
-                        <TextArea ref={textAreaRef} />
-                        <Button data-button-type={COMMENT.CANCEL}>
-                            {COMMENT.CANCEL}
+                <div className="comment-top mb-1">
+                    <div className="comment-text p-1 mb-1">
+                        <Typography.Paragraph
+                            customClass="comment-para"
+                            data-comment={DATA_ATTR.TEXT}
+                        >
+                            {text}
+                        </Typography.Paragraph>
+                    </div>
+                    <div className="comment-actions">
+                        <Button
+                            customClass="mr-1"
+                            data-button-type={DATA_ATTR.EDIT}
+                        >
+                            {BUTTON_TEXT.EDIT}
                         </Button>
                         <Button
-                            data-button-type={
-                                showBottom === COMMENT.EDIT
-                                    ? COMMENT.SAVE
-                                    : showBottom
-                            }
+                            customClass="mr-1"
+                            data-button-type={DATA_ATTR.DELETE}
                         >
-                            {showBottom === COMMENT.EDIT
-                                ? COMMENT.SAVE
-                                : showBottom}
+                            {BUTTON_TEXT.DELETE}
                         </Button>
+                        <Button data-button-type={DATA_ATTR.REPLY}>
+                            {BUTTON_TEXT.REPLY}
+                        </Button>
+                    </div>
+                </div>
+                {!!inputType && (
+                    <div className="comment-bottom">
+                        <TextArea
+                            placeholder={PLACEHOLDER.ADD_REPLY}
+                            ref={textAreaRef}
+                            customClass="reply-text-area mb-1"
+                        />
+                        <div className="comment-actions">
+                            <Button
+                                customClass="mr-1"
+                                data-button-type={DATA_ATTR.CANCEL}
+                            >
+                                {BUTTON_TEXT.CANCEL}
+                            </Button>
+                            <Button
+                                data-button-type={
+                                    inputType === DATA_ATTR.EDIT
+                                        ? DATA_ATTR.SAVE
+                                        : inputType
+                                }
+                            >
+                                {inputType === DATA_ATTR.EDIT
+                                    ? BUTTON_TEXT.SAVE
+                                    : BUTTON_TEXT.POST}
+                            </Button>
+                        </div>
                     </div>
                 )}
             </div>
             <div
                 className="replies-container"
-                style={{ marginLeft: `${depth + 1}rem` }}
+                style={{ marginLeft: `${depth + 5}rem` }}
             >
                 {replies.map((reply) => (
                     <Comment
                         key={reply.id}
                         commentData={reply}
                         depth={depth + 1}
-                    /> //! Shouldn't use index as key
+                    />
                 ))}
             </div>
         </div>

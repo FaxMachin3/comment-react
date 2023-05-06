@@ -1,0 +1,15 @@
+@import '../../../partials/config';
+
+.para {
+    line-height: 1.5;
+    margin-bottom: 1rem;
+
+    a {
+        color: $primary-color;
+        transition-duration: $transition-duration;
+
+        &:hover {
+            color: $primary-color-hover;
+        }
+    }
+}
