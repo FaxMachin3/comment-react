@@ -59,21 +59,6 @@ export const getTextFromCurrentCommentContainer = (target: HTMLElement) => {
     return newText;
 };
 
-const MONTH_NAMES = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-];
-
 export const formatDate = (timestamp: number): string => {
     const date = new Date(timestamp);
     const months = [
