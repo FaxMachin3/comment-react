@@ -101,7 +101,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
         });
     };
     return (
-        <div className="comment-container" onClick={onCommentActions}>
+        <div className="comment-container my-1" onClick={onCommentActions}>
             {comments.map((commentData) => (
                 <Comment
                     key={commentData.id}

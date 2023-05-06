@@ -6,6 +6,7 @@ import TextArea from '../common/text-area';
 import { useCustomRefWithCallback } from '../../hooks';
 
 import './style.scss';
+import { formatDate } from '../../utils';
 
 interface CommentProps {
     customClass?: string;
@@ -27,15 +28,18 @@ const Comment: React.FC<CommentProps> = ({
     );
 
     return (
-        <div className={`comment p-1 ${customClass}`}>
+        <div className={`comment ${customClass}`}>
             <div className="comment-wrapper" data-id={id}>
                 <div className="comment-top mb-1">
                     <div className="comment-text p-1 mb-1">
                         <Typography.Paragraph
-                            customClass="comment-para"
+                            customClass="comment-para mr-1"
                             data-comment={DATA_ATTR.TEXT}
                         >
                             {text}
+                        </Typography.Paragraph>
+                        <Typography.Paragraph customClass="timestamp">
+                            {formatDate(createdAt)}
                         </Typography.Paragraph>
                     </div>
                     <div className="comment-actions">

@@ -26,3 +26,7 @@ export const SELECTOR = {
     COMMENT_WRAPPER: '.comment-wrapper',
     COMMENT_BOTTOM: '.comment-bottom',
 };
+
+export const PERSISTENT_STORE = {
+    COMMENTS: 'comments',
+};

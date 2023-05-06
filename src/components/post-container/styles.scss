@@ -1,4 +1,9 @@
 .post-container {
     max-width: 400px;
     text-align: end;
+
+    .heading {
+        text-align: start;
+        margin-bottom: 0.5rem;
+    }
 }

@@ -5,6 +5,7 @@ import TextArea from '../common/text-area';
 import { CommentType } from '../../types';
 import { BUTTON_TEXT, PLACEHOLDER } from '../../constants';
 import { generateNewComment } from '../../utils';
+import Typography from '../common/typography';
 
 import './styles.scss';
 
@@ -28,6 +29,9 @@ const PostContainer: React.FC<PostContainerProps> = ({ setComments }) => {
 
     return (
         <div className="post-container">
+            <Typography.Heading customClass="heading">
+                Comment Widget
+            </Typography.Heading>
             <TextArea
                 placeholder={PLACEHOLDER.ADD_COMMENT}
                 customClass="mb-1"
